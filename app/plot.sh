@@ -7,14 +7,14 @@ gen_file(){
   echo "set out \"$1.$2.$3.png\""
   echo "$4"
   echo -n "plot "
-  for x in i v vu vm j jw; do
-    echo -n "\"$1/$x.dat\" using $2:$3 title \"$x\" with linespoints, "
+  for x in i v vu vm vs j jw; do
+      echo -n "\"$1/$x.dat\" using $2:$3 title \"$x\" with linespoints, "
   done
 }
 
-for x in i v vu vm j jw; do
-  head -36 ftest.out | grep "^$x	" > tmp_ins/$x.dat
-  tail -36 ftest.out | grep "^$x	" > tmp_size/$x.dat
+for x in i v vu vm vs j jw; do
+    head -36 ftest.out | grep "^$x	" > tmp_ins/$x.dat
+    tail -36 ftest.out | grep "^$x	" > tmp_size/$x.dat
 done
 
 # user time by number of inserts

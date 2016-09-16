@@ -9,6 +9,7 @@ import Data.Judy
 import qualified Data.IntMap.Strict as I
 import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as U
+import qualified Data.Vector.Storable as S
 import qualified Data.Vector.Unboxed.Mutable as UV
 
 import System.Random
@@ -26,6 +27,7 @@ main = do
     "v" ->   printmap_V =<< freqCount_V (read b) (take a $ randomRs (0, read b::Int) g)
     "vu" ->   printmap_U =<< freqCount_U (read b) (take a $ randomRs (0, read b::Int) g)
     "vm" ->   printmap_UV =<< freqCount_UV (read b) (take a $ randomRs (0, read b::Int) g)
+    "vs" ->   printmap_S =<< freqCount_S (read b) (take a $ randomRs (0, read b::Int) g)
 
 -- --------------------------------------------------
 -- IntMap - for reference
@@ -55,6 +57,16 @@ freqCount_U v = return . U.accum (+) v0 . map (\x -> (x,1))
 
 printmap_U :: U.Vector Int -> IO ()
 printmap_U v = mapM_ (putStrLn . show) $ map ((U.!) v) [0..30::Int]
+
+-- --------------------------------------------------
+-- Storable Vector
+
+freqCount_S :: Int -> [Int] -> IO (S.Vector Int)
+freqCount_S v = return . S.accum (+) v0 . map (\x -> (x,1))
+  where v0 = S.replicate (v+1) 0
+
+printmap_S :: S.Vector Int -> IO ()
+printmap_S v = mapM_ (putStrLn . show) $ map ((S.!) v) [0..30::Int]
 
 -- --------------------------------------------------
 -- Unsafe/Unboxed/Mutable Vector
