@@ -6,6 +6,7 @@ import Data.Maybe (fromMaybe)
 -- TODO: bench judy, vector, judy-tight, bloom-filter
 
 import Data.Judy
+import qualified Data.List as L
 import qualified Data.IntMap.Strict as I
 import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as U
@@ -28,6 +29,8 @@ main = do
     "vu" ->   printmap_U =<< freqCount_U (read b) (take a $ randomRs (0, read b::Int) g)
     "vm" ->   printmap_UV =<< freqCount_UV (read b) (take a $ randomRs (0, read b::Int) g)
     "vs" ->   printmap_S =<< freqCount_S (read b) (take a $ randomRs (0, read b::Int) g)
+    "l" ->   printmap_L =<< freqCount_L   (take a $ randomRs (0, read b::Int) g)
+    _  ->   return ()
 
 -- --------------------------------------------------
 -- IntMap - for reference
@@ -114,3 +117,13 @@ freqCount_Jiw xs = do
   m <- new
   mapM_ (\x -> insertWith (+) x 1 m) xs
   return m
+
+-- --------------------------------------------------
+-- List - for reference
+
+freqCount_L :: [Int] -> IO [(Int,Int)]
+freqCount_L = return . map (\x -> (x,1::Int))
+
+printmap_L :: [(Int,Int)] -> IO ()
+printmap_L [] = return ()
+printmap_L m = mapM_ print (map (flip L.lookup m) [0..30::Int])

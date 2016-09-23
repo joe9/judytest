@@ -8,7 +8,7 @@ M=000000
 FORMAT="%U %S %M"
 
 ftest(){
-    for x in i v vu vm vs j jw; do
+    for x in i v vu vm vs j jw l; do
         echo -n "$x	$1	$2	"
         /usr/bin/time --format="$FORMAT" ../.stack-work/install/x86_64-linux/nightly-2016-09-16/8.0.1/bin/judytest-exe $x $* > /dev/null
     done
